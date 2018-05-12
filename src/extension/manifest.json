@@ -1,0 +1,26 @@
+{
+  "name": "Awesome Rabbitmq Managment",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Awesome Rabbitmq Managment",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": { "scripts": ["background.js"] },
+  "permissions": [
+    "http://localhost:15672/"
+    // "http://rabbitmq.docker.localhost"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:15672/*"
+        // "http://rabbitmq.docker.localhost/*"
+      ],
+
+      "js": ["bundle.js"]
+    }
+  ]
+}
