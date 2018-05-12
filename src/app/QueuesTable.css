@@ -1,0 +1,18 @@
+.is-alarm {
+  color: #ff7e52;
+  font-weight: bold;
+}
+
+.ReactTable {
+  font-size: 14px;
+}
+
+.health--good {
+  font-size: 20px;
+  color: green;
+}
+
+.health--bad {
+  font-size: 20px;
+  color: darkred;
+}

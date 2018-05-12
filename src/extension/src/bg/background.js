@@ -46,3 +46,15 @@ chrome.management.getSelf(self => {
     chrome.runtime.getPackageDirectoryEntry(dir => watchChanges(dir));
   }
 });
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request && request.type === "awesome-rabbit-load") {
+      chrome.storage.sync.get({queuesConfig: ''}, function(items) {
+        const queuesConfig = items.queuesConfig ? JSON.parse(items.queuesConfig) : {};
+        sendResponse({queuesConfig});
+      });
+    }
+    return true;
+  }
+);

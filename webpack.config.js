@@ -31,6 +31,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: './src/extension/manifest.json', to: '' },
+      { from: './src/extension/src/options', to: '' },
       { from: './src/extension/src/bg/background.js', to: '' },
       { from: './src/extension/icons', to: 'icons' }
     ])

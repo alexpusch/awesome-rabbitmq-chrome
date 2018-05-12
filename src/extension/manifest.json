@@ -1,25 +1,22 @@
 {
-  "name": "Awesome Rabbitmq Managment",
+  "name": "Awesome RabbitMQ Management",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Awesome Rabbitmq Managment",
+  "options_page": "options.html",
+  "description": "Awesome RabbitMQ Management",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
   "background": { "scripts": ["background.js"] },
-  "permissions": [
-    "http://localhost:15672/"
-    // "http://rabbitmq.docker.localhost"
+  "permissions": ["<all_urls>", "storage"],
+  "web_accessible_resources": [
+    "icons/icon128.png"
   ],
   "content_scripts": [
     {
-      "matches": [
-        "http://localhost:15672/*"
-        // "http://rabbitmq.docker.localhost/*"
-      ],
-
+      "matches": ["<all_urls>"],
       "js": ["bundle.js"]
     }
   ]

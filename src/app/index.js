@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import QueuesTable from './QueuesTable';
 
-export default root => {
+export default (root, config) => {
   ReactDOM.render(
     <div>
-      <QueuesTable />
+      <QueuesTable config={config} />
     </div>,
     root
   );
