@@ -59,8 +59,13 @@ function getColumns(queueConfig) {
       maxWidth: 200,
       accessor: item => {
         const node = item.node;
-        const [ip] = node.match(/\d+-\d+-\d+-\d+/);
-        return ip.replace(/-/g, '.');
+        const match = node.match(/\d+-\d+-\d+-\d+/);
+        if (match) {
+          const [ip] = match;
+          return ip.replace(/-/g, '.');
+        } else {
+          return node;
+        }
       },
       aggregate: vals => (vals.length == 1 ? vals[0] : ''),
       filterMethod: containsFilter
