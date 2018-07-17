@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx webpack --watch --mode=development"
+    "start": "npx webpack --watch --mode=development",
+    "build": "webpack",
+    "create-zip": "npm run build && cd dist && zip -r dist.zip * && cd ..",
+    "clean": "rm -rf dist"
   },
   "author": "",
   "license": "ISC",
