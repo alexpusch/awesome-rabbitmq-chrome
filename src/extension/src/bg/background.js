@@ -1,60 +1,28 @@
-const filesInDirectory = dir =>
-  new Promise(resolve =>
-    dir.createReader().readEntries(entries =>
-      Promise.all(
-        entries
-          .filter(e => e.name[0] !== '.')
-          .map(
-            e =>
-              e.isDirectory
-                ? filesInDirectory(e)
-                : new Promise(resolve => e.file(resolve))
-          )
-      )
-        .then(files => [].concat(...files))
-        .then(resolve)
-    )
-  );
+// const setupAutoReload = require("./setupAutoReload");
+import setupAutoReload from "./setupAutoReload";
+const awesomeTabs = [];
 
-const timestampForFilesInDirectory = dir =>
-  filesInDirectory(dir).then(files =>
-    files.map(f => f.name + f.lastModifiedDate).join()
-  );
+setupAutoReload();
 
-const reload = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    if (tabs[0]) {
-      chrome.tabs.reload(tabs[0].id);
-    }
-
-    chrome.runtime.reload();
-  });
-};
-
-const watchChanges = (dir, lastTimestamp) => {
-  timestampForFilesInDirectory(dir).then(timestamp => {
-    if (!lastTimestamp || lastTimestamp === timestamp) {
-      setTimeout(() => watchChanges(dir, timestamp), 1000); // retry after 1s
-    } else {
-      reload();
-    }
-  });
-};
-
-chrome.management.getSelf(self => {
-  if (self.installType === 'development') {
-    chrome.runtime.getPackageDirectoryEntry(dir => watchChanges(dir));
+chrome.tabs.onActivated.addListener(activeInfo => {
+  if (awesomeTabs.includes(activeInfo.tabId)) {
+    chrome.browserAction.enable();
+  } else {
+    chrome.browserAction.disable();
   }
 });
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request && request.type === "awesome-rabbit-load") {
-      chrome.storage.sync.get({queuesConfig: ''}, function(items) {
-        const queuesConfig = items.queuesConfig ? JSON.parse(items.queuesConfig) : {};
-        sendResponse({queuesConfig});
-      });
-    }
-    return true;
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request && request.type === "awesome-rabbit-load") {
+    chrome.storage.sync.get({ queuesConfig: "" }, function(items) {
+      const queuesConfig = items.queuesConfig ? JSON.parse(items.queuesConfig) : {};
+      sendResponse({ queuesConfig });
+    });
   }
-);
+
+  if (request && request.type === "awesome-rabbit-start") {
+    awesomeTabs.push(sender.tab.id);
+    chrome.browserAction.enable(sender.tab.id);
+  }
+  return true;
+});

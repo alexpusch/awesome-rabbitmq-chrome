@@ -3,11 +3,17 @@ const PostCompile = require('post-compile-webpack-plugin');
 const axios = require('axios');
 
 module.exports = {
-  entry: ['./src/extension/src/inject/inject.js'],
+  entry: {
+    bundle: './src/extension/src/inject/inject.js',
+    background: './src/extension/src/bg/background.js'
+  },
+  node: {
+    global: false
+  },
+  devtool: false,
   output: {
     path: __dirname + '/dist',
-    publicPath: '/',
-    filename: 'bundle.js'
+    publicPath: '/'
   },
   devServer: {
     contentBase: './dist'
@@ -32,7 +38,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/extension/manifest.json', to: '' },
       { from: './src/extension/src/options', to: '' },
-      { from: './src/extension/src/bg/background.js', to: '' },
       { from: './src/extension/icons', to: 'icons' }
     ])
   ]
