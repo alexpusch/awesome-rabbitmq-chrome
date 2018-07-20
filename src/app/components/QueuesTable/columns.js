@@ -144,18 +144,18 @@ function getColumns(queueConfig) {
       },
       filterable: false
     },
-    // {
-    //   Header: 'Health',
-    //   id: 'health',
-    //   accessor: item => _.mean(item.health),
-    //   aggregate: vals => vals[0],
-    //   Cell: row =>
-    //     row.value >= 1 ? (
-    //       <div className="health--good">☺</div>
-    //     ) : (
-    //       <div className="health--bad">😢</div>
-    //     )
-    // },
+    {
+      Header: 'Trend',
+      id: 'health',
+      accessor: item => _.mean(item.health),
+      aggregate: vals => vals[0],
+      Cell: row =>
+        row.value >= 1 ? (
+          <div className="health--good">☺</div>
+        ) : (
+          <div className="health--bad">😢</div>
+        )
+    },
     {
       Header: 'Base queue name',
       id: 'baseName',

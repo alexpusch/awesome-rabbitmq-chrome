@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import _ from 'lodash';
-import axios from 'axios';
-import getColumns from './columns';
-import './QueuesTable.css';
-import QueuesHealthState from './helpers/QueueHealthState';
-import getBaseQueueName from './helpers/getBaseQueueName';
+import React, { Component } from "react";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+import _ from "lodash";
+import axios from "axios";
+import getColumns from "./columns.js";
+import "./QueuesTable.css";
+import QueuesHealthState from "../lib/QueueHealthState";
+import getBaseQueueName from "../lib/getBaseQueueName";
 
-const URL =
-  '/api/queues?page=1&page_size=300&name=&use_regex=false&pagination=true';
+const URL = "/api/queues?page=1&page_size=300&name=&use_regex=false&pagination=true";
 
 class App extends Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class App extends Component {
 
   refreshData() {
     axios({
-      method: 'get',
+      method: "get",
       url: URL,
       withCredentials: true,
       headers: { authorization: this.config.authHeader }
@@ -37,9 +36,7 @@ class App extends Component {
         });
       });
 
-      const numberOfRows = _.uniq(
-        items.map(item => getBaseQueueName(item.name))
-      ).length;
+      const numberOfRows = _.uniq(items.map(item => getBaseQueueName(item.name))).length;
 
       this.setState({
         data: itemsWithWindow,
@@ -65,14 +62,14 @@ class App extends Component {
           filterable
           data={data}
           columns={columns}
-          pageSize={numberOfRows}
-          pivotBy={['baseName']}
+          pageSize={Math.max(numberOfRows, 15)}
+          pivotBy={["baseName"]}
           collapseOnDataChange={false}
           showPagination={false}
           showPageSizeOptions={false}
           className="-striped -highlight"
           style={{
-            height: 'calc(100vh - 200px)' // This will force the table body to overflow and scroll, since there is not enough room
+            height: "calc(100vh - 200px)" // This will force the table body to overflow and scroll, since there is not enough room
           }}
         />
       </div>
