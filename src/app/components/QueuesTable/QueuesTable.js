@@ -5,8 +5,10 @@ import _ from "lodash";
 import axios from "axios";
 import getColumns from "./columns.js";
 import "./QueuesTable.css";
-import QueuesHealthState from "../lib/QueueHealthState";
-import getBaseQueueName from "../lib/getBaseQueueName";
+import QueuesAverageState from "../../lib/QueuesAverageState";
+import getBaseQueueName from "../../lib/getBaseQueueName";
+import TimeConsts from "../../lib/TimeConsts";
+import getTrend from "../../lib/getTrend";
 
 const URL = "/api/queues?page=1&page_size=300&name=&use_regex=false&pagination=true";
 
@@ -14,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.config = props.config;
-    this.queuesHealthState = new QueuesHealthState(6);
+    this.queuesAverageState = new QueuesAverageState();
     this.state = {
       data: []
     };
@@ -28,11 +30,29 @@ class App extends Component {
       headers: { authorization: this.config.authHeader }
     }).then(json => {
       const items = json.data.items;
-      this.queuesHealthState.addDataPoint(items);
+      this.queuesAverageState.addDataPoint(items);
 
       const itemsWithWindow = items.map((queue, i) => {
+        const queueAverageState1m = this.queuesAverageState.getAverage(
+          queue.name,
+          TimeConsts.MINUTE
+        );
+        const queueAverageState5m = this.queuesAverageState.getAverage(
+          queue.name,
+          5 * TimeConsts.MINUTE
+        );
+        const queueAverageState15m = this.queuesAverageState.getAverage(
+          queue.name,
+          15 * TimeConsts.MINUTE
+        );
+
         return Object.assign({}, queue, {
-          health: this.queuesHealthState.getWindow(queue.name)
+          average: queueAverageState1m,
+          trendAverage: {
+            trend1m: getTrend(queueAverageState1m),
+            trend5m: getTrend(queueAverageState5m),
+            trend15m: getTrend(queueAverageState15m)
+          }
         });
       });
 

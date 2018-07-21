@@ -1,0 +1,19 @@
+.trend-average {
+  display: flex;
+}
+
+.trend-average__item {
+  margin: 0px 4px;
+}
+
+.trend-average__item--1 {
+  color: black;
+}
+
+.trend-average__item--5 {
+  color: #757575;
+}
+
+.trend-average__item--15 {
+  color: #a8a8a8;
+}

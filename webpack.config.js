@@ -10,7 +10,7 @@ module.exports = {
   node: {
     global: false
   },
-  devtool: false,
+  devtool: 'source-map',
   output: {
     path: __dirname + '/dist',
     publicPath: '/'
