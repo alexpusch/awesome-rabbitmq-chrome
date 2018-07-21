@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import QueuesTable from "../QueuesTable/QueuesTable";
-import Countdown from "../Countdown/Countdown";
+import QueuesTable from "../QueuesTable/QueuesTable.jsx";
+import Countdown from "../Countdown/Countdown.jsx";
 import QueuesAverageState from "../../lib/QueuesAverageState";
 import TimeConsts from "../../lib/TimeConsts";
 import getTrend from "../../lib/getTrend";
