@@ -52,7 +52,8 @@ class App extends React.Component {
       });
 
       this.setState({
-        data: itemsWithWindow
+        data: itemsWithWindow,
+        lastUpdateDate: new Date().getTime()
       });
 
       setTimeout(this.refreshData.bind(this), 5000);
@@ -66,6 +67,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <Countdown duration={5000} startTime={this.state.lastUpdateDate} />
         <QueuesTable data={this.state.data} config={this.props.config} />
       </div>
     );

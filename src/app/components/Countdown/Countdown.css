@@ -1,0 +1,10 @@
+.countdown {
+  width: 100%;
+  height: 2px;
+  background: #ccc;
+}
+
+.countdown__progress {
+  height: 100%;
+  background: #3399e2;
+}
