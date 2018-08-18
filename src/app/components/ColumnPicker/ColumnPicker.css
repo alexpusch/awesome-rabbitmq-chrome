@@ -1,0 +1,31 @@
+.column-picker {
+  position: relative;
+}
+
+.columns-groups {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+}
+
+.column-group {
+  margin: 0 20px;
+}
+
+.column-group__header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.columns {
+  position: relative;
+  right: 3px;
+}
+
+.column-picker__button {
+  position: absolute;
+  left: -18px;
+  font-size: 16px;
+  top: 3px;
+  cursor: pointer;
+}
