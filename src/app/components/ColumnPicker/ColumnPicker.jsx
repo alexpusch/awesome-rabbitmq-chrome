@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import Transition from "react-transition-group/Transition";
 
 import ColumnGroups from "./ColumnGroups";
+import ColumnStateProvider from "./ColumnStateProvider";
 import "./ColumnPicker.css";
+
+const getPickableColumns = columnsGroups =>
+  columnsGroups.filter(columnGroup => columnGroup.columns).map(columnGroup => ({
+    Header: columnGroup.Header,
+    columns: columnGroup.columns.filter(column => column.pickable)
+  }));
 
 class ColumnPicker extends Component {
   constructor(props) {
@@ -21,15 +28,12 @@ class ColumnPicker extends Component {
       );
       const changedColumn = changedColumnGroup.columns.find(column => column.Header === header);
       changedColumn.show = isChecked;
+
+      ColumnStateProvider.saveState(getPickableColumns(this.props.columns));
       this.props.onColumnChange(this.props.columns);
     };
 
-    const pickableColumns = this.props.columns
-      .filter(columnGroup => columnGroup.columns)
-      .map(columnGroup => ({
-        Header: columnGroup.Header,
-        columns: columnGroup.columns.filter(column => column.pickable)
-      }));
+    const pickableColumns = ColumnStateProvider.loadState(getPickableColumns(this.props.columns));
 
     const onOpenClick = () => {
       this.setState((prevState, props) => ({
