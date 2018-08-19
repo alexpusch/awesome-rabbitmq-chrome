@@ -16,3 +16,23 @@
   font-size: 20px;
   color: darkred;
 }
+
+.ReactTable .rt-tbody .rt-td {
+  padding-left: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.ReactTable .rt-thead .rt-resizable-header {
+  align-self: center;
+}
+
+.ReactTable .rt-thead .rt-resizable-header-content {
+  overflow: hidden;
+  white-space: normal;
+}
+
+.ReactTable .rt-thead .rt-th,
+.ReactTable .rt-thead .rt-td {
+  overflow: hidden;
+  white-space: normal;
+}

@@ -4,6 +4,7 @@ import _ from "lodash";
 import classnames from "classnames";
 import getBaseQueueName from "../../lib/getBaseQueueName";
 import TrendAverage from "../TrendAverage/TrendAverage";
+import bytes from "bytes";
 
 function AlarmCell({ value, alarmFn, children }) {
   const isAlarm = alarmFn(value);
@@ -30,6 +31,7 @@ function containsFilter(filter, row) {
 
 const numberFormatter = row => numeral(row.value).format("0a");
 const perSecondFormatter = row => `${numeral(row.value).format("0.0a")}/s`;
+const bytesFormatter = row => bytes(row.value);
 
 const withAlarm = (queueConfig, formatter) => row => {
   const queueBaseName = row.row.baseName;
@@ -53,7 +55,7 @@ function getColumns(queueConfig) {
       Header: "🔗",
       accessor: item => `/#/queues/%2F/${item.name}`,
       id: "link",
-      maxWidth: 30,
+      maxWidth: 40,
       Cell: row => (
         <a href={row.value} target="_blank">
           🔗
@@ -74,7 +76,6 @@ function getColumns(queueConfig) {
       Header: "Name",
       accessor: "name",
       show: false,
-      minWidth: 500,
       filterMethod: containsFilter,
       pickable: false
     },
@@ -84,7 +85,6 @@ function getColumns(queueConfig) {
         {
           Header: "Base queue name",
           id: "baseName",
-          minWidth: 500,
           accessor: item => getBaseQueueName(item.name),
           filterMethod: containsFilter,
           pickable: false,
@@ -114,8 +114,8 @@ function getColumns(queueConfig) {
         {
           Header: "Policy",
           accessor: "policy",
-          maxWidth: 50,
-          aggregate: vals => _.sum(vals),
+          maxWidth: 150,
+          aggregate: vals => "",
           filterable: false,
           pickable: true,
           show: false
@@ -123,7 +123,7 @@ function getColumns(queueConfig) {
         {
           Header: "Consumers count",
           accessor: "consumers",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withAlarm(queueConfig, numberFormatter),
           filterable: false,
@@ -133,8 +133,8 @@ function getColumns(queueConfig) {
         {
           Header: "Consumers utilisation",
           accessor: "consumer_utilisation",
-          maxWidth: 50,
-          aggregate: vals => _.sum(vals),
+          maxWidth: 100,
+          aggregate: vals => _.mean(vals),
           Cell: withFormatter(numberFormatter),
           filterable: false,
           pickable: true,
@@ -143,8 +143,8 @@ function getColumns(queueConfig) {
         {
           Header: "State",
           accessor: "state",
-          maxWidth: 50,
-          aggregate: vals => _.sum(vals),
+          maxWidth: 100,
+          aggregate: vals => "",
           filterable: false,
           pickable: true,
           show: false
@@ -157,7 +157,7 @@ function getColumns(queueConfig) {
         {
           Header: "Ready",
           accessor: "messages_ready",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withFormatter(numberFormatter), // TODO: make default alarm value
           filterable: false,
@@ -167,7 +167,7 @@ function getColumns(queueConfig) {
         {
           Header: "Unacknowledged",
           accessor: "messages_unacknowledged",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withFormatter(numberFormatter),
           filterable: false,
@@ -177,7 +177,7 @@ function getColumns(queueConfig) {
         {
           Header: "In memory",
           accessor: "messages_ram",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withFormatter(numberFormatter),
           filterable: false,
@@ -187,7 +187,7 @@ function getColumns(queueConfig) {
         {
           Header: "Persistent",
           accessor: "messages_persistent",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withFormatter(numberFormatter),
           filterable: false,
@@ -197,7 +197,7 @@ function getColumns(queueConfig) {
         {
           Header: "Total",
           accessor: "messages",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
           Cell: withFormatter(numberFormatter),
           filterable: false,
@@ -212,9 +212,9 @@ function getColumns(queueConfig) {
         {
           Header: "Ready",
           accessor: "message_bytes_ready",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(bytesFormatter),
           filterable: false,
           pickable: true,
           show: false
@@ -222,9 +222,9 @@ function getColumns(queueConfig) {
         {
           Header: "Unacknowledged",
           accessor: "message_bytes_unacknowledged",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(bytesFormatter),
           filterable: false,
           pickable: true,
           show: false
@@ -232,9 +232,9 @@ function getColumns(queueConfig) {
         {
           Header: "In memory",
           accessor: "message_bytes_message_bytes_ramnacknowledged",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(bytesFormatter),
           filterable: false,
           pickable: true,
           show: false
@@ -242,9 +242,9 @@ function getColumns(queueConfig) {
         {
           Header: "Persistent",
           accessor: "message_bytes_persistent",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(bytesFormatter),
           filterable: false,
           pickable: true,
           show: false
@@ -252,9 +252,9 @@ function getColumns(queueConfig) {
         {
           Header: "Total",
           accessor: "message_bytes",
-          maxWidth: 50,
+          maxWidth: 100,
           aggregate: vals => _.sum(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(bytesFormatter),
           filterable: false,
           pickable: true,
           show: false
@@ -314,6 +314,7 @@ function getColumns(queueConfig) {
           Header: "Trend average",
           id: "trendAverage",
           accessor: "trendAverage",
+          maxWidth: 300,
           aggregate: vals => ({
             trend1m: _.meanBy(vals, "trend1m"),
             trend5m: _.meanBy(vals, "trend5m"),
