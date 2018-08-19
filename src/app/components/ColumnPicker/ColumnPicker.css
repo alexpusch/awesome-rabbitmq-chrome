@@ -28,4 +28,9 @@
   font-size: 16px;
   top: 3px;
   cursor: pointer;
+  user-select: none;
+}
+
+.column-picker__button:hover {
+  font-weight: bold;
 }
