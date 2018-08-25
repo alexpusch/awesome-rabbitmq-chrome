@@ -4,7 +4,7 @@ import _ from "lodash";
 import classnames from "classnames";
 import getBaseQueueName from "../../lib/getBaseQueueName";
 import TrendAverage from "../TrendAverage/TrendAverage";
-import { containsFilter } from "./helpers/formatters";
+import { containsFilter, queueFilter } from "./helpers/filters";
 import {
   numberFormatter,
   perSecondFormatter,
@@ -82,12 +82,19 @@ function getColumns(queueConfig) {
       Header: "Overview",
       columns: [
         {
-          Header: "Base queue name",
+          Header: "Queue",
           id: "baseName",
           accessor: item => getBaseQueueName(item.name),
-          filterMethod: containsFilter,
+          filterMethod: queueFilter,
           pickable: false,
-          show: true
+          show: true,
+          Cell: cellData => {
+            // https://github.com/react-tools/react-table/issues/882
+            if (cellData.original) {
+              cellData.pivoted = false;
+              return <div style={{ marginLeft: "30px" }}>{cellData.row.node}</div>;
+            }
+          }
         },
         {
           Header: "Node",
@@ -105,8 +112,8 @@ function getColumns(queueConfig) {
           },
           aggregate: empty,
           filterMethod: containsFilter,
-          pickable: true,
-          show: true
+          pickable: false,
+          show: false
         },
         // features (with policy)
         // features (no policy)
