@@ -4,7 +4,7 @@ import _ from "lodash";
 import classnames from "classnames";
 import getBaseQueueName from "../../lib/getBaseQueueName";
 import TrendAverage from "../TrendAverage/TrendAverage";
-import { containsFilter, queueFilter } from "./helpers/filters";
+import { containsFilter, queueFilter, numericRangeFilter } from "./helpers/filters";
 import {
   numberFormatter,
   perSecondFormatter,
@@ -12,6 +12,7 @@ import {
   stateFormatter
 } from "./helpers/formatters";
 import { uniqe, first, sum, empty } from "./helpers/aggregates";
+import NumericFilter from "../NumericFilter/NumericFilter";
 
 function AlarmCell({ value, alarmFn, children }) {
   const isAlarm = alarmFn(value);
@@ -47,6 +48,12 @@ const withAlarm = (queueConfig, formatter) => row => {
 };
 
 const withFormatter = formatter => row => formatter(row);
+
+const withFilterComponent = Component => ({ filter, onChange }) => (
+  <Component filter={filter} onChange={onChange} />
+);
+
+const numericHeaderClassNames = "numeric-header";
 
 function getColumns(queueConfig) {
   return [
@@ -132,9 +139,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withAlarm(queueConfig, numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: true
+          show: true,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Consumers utilisation",
@@ -142,9 +152,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: vals => _.mean(vals),
           Cell: withFormatter(numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "State",
@@ -167,9 +180,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(numberFormatter), // TODO: make default alarm value
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: true
+          show: true,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Unacknowledged",
@@ -177,9 +193,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "In memory",
@@ -187,9 +206,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Persistent",
@@ -197,9 +219,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Total",
@@ -207,9 +232,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(numberFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         }
       ]
     },
@@ -222,9 +250,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(bytesFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Unacknowledged",
@@ -232,9 +263,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(bytesFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "In memory",
@@ -242,9 +276,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(bytesFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Persistent",
@@ -252,9 +289,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(bytesFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Total",
@@ -262,9 +302,12 @@ function getColumns(queueConfig) {
           maxWidth: 100,
           aggregate: sum,
           Cell: withFormatter(bytesFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         }
       ]
     },
@@ -277,9 +320,12 @@ function getColumns(queueConfig) {
           maxWidth: 120,
           aggregate: sum,
           Cell: withFormatter(perSecondFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: true
+          show: true,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "deliver",
@@ -287,9 +333,12 @@ function getColumns(queueConfig) {
           maxWidth: 120,
           aggregate: sum,
           Cell: withFormatter(perSecondFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: true
+          show: true,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "redelivered",
@@ -303,9 +352,12 @@ function getColumns(queueConfig) {
               </AlarmCell>
             );
           },
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: true
+          show: true,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "ack",
@@ -313,9 +365,12 @@ function getColumns(queueConfig) {
           maxWidth: 120,
           aggregate: sum,
           Cell: withFormatter(perSecondFormatter),
-          filterable: false,
+          filterable: true,
           pickable: true,
-          show: false
+          show: false,
+          Filter: withFilterComponent(NumericFilter),
+          filterMethod: numericRangeFilter,
+          headerClassName: numericHeaderClassNames
         },
         {
           Header: "Trend average",

@@ -1,0 +1,31 @@
+.numeric-filter-edit {
+  position: absolute;
+  background: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.numeric-filter-edit__clear {
+  color: #c13300;
+  cursor: pointer;
+  font-size: 10px;
+  align-self: flex-end;
+  margin-top: 4px;
+}
+
+.numeric-filter-edit__input {
+  width: 100%;
+}
+
+.numeric-filter-edit__input::placeholder {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.numeric-filter__separator {
+  font-size: 10px;
+  margin: 5px 5px;
+  color: #aaa;
+  font-style: italic;
+}

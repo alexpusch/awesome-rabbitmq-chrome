@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 function containsFilter(filter, row) {
   return row[filter.id].includes(filter.value);
 }
@@ -12,4 +14,11 @@ function queueFilter(filter, row) {
   return isBaseName || isNode;
 }
 
-export { containsFilter, queueFilter };
+function numericRangeFilter(filter, row) {
+  const value = row[filter.id] ? parseInt(row[filter.id], 10) : 0;
+  const { min, max } = _.defaults(filter.value, { min: -Infinity, max: Infinity });
+
+  return value >= min && value <= max;
+}
+
+export { containsFilter, queueFilter, numericRangeFilter };

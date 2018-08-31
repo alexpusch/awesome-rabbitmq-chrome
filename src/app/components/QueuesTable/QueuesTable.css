@@ -36,3 +36,8 @@
   overflow: hidden;
   white-space: normal;
 }
+
+.ReactTable .rt-thead.-filters .rt-th.numeric-header {
+  position: relative;
+  overflow: visible;
+}
