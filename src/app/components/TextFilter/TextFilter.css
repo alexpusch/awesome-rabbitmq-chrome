@@ -1,0 +1,27 @@
+.text-filter {
+  width: 100%;
+  position: relative;
+}
+
+.text-filter__input {
+  width: 100%;
+}
+
+.text-filter__input::placeholder {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.text-filter__clear {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  font-size: 10px;
+  color: #c13300;
+  display: none;
+  cursor: pointer;
+}
+
+.text-filter:hover .text-filter__clear {
+  display: block;
+}

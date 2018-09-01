@@ -13,6 +13,7 @@ import {
 } from "./helpers/formatters";
 import { uniqe, first, sum, empty } from "./helpers/aggregates";
 import NumericFilter from "../NumericFilter/NumericFilter";
+import TextFilter from "../TextFilter/TextFilter";
 
 function AlarmCell({ value, alarmFn, children }) {
   const isAlarm = alarmFn(value);
@@ -93,6 +94,7 @@ function getColumns(queueConfig) {
           id: "baseName",
           accessor: item => getBaseQueueName(item.name),
           filterMethod: queueFilter,
+          Filter: withFilterComponent(TextFilter),
           pickable: false,
           show: true,
           Cell: cellData => {
@@ -129,7 +131,8 @@ function getColumns(queueConfig) {
           accessor: "policy",
           maxWidth: 150,
           aggregate: first,
-          filterable: false,
+          filterable: true,
+          Filter: withFilterComponent(TextFilter),
           pickable: true,
           show: false
         },
