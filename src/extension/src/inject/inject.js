@@ -14,9 +14,11 @@ chrome.extension.sendMessage({ type: "awesome-rabbit-load" }, function(response)
   window.addEventListener("message", e => {
     if (e.data.source === "awesome") {
       const root = window.document.querySelector("#awesome-root");
+
       const config = {
         authHeader: e.data.authHeader,
-        queuesConfig: response.queuesConfig
+        queuesConfig: response.queuesConfig,
+        timerInterval: e.data.timerInterval
       };
 
       startApp(root, config);
@@ -49,7 +51,8 @@ function bootstrapScript() {
 
       const message = {
         source: "awesome",
-        authHeader: auth_header()
+        authHeader: auth_header(),
+        timerInterval: window.timer_interval
       };
 
       window.postMessage(message, "*");

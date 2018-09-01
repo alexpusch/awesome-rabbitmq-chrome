@@ -6,7 +6,7 @@ class Countdown extends React.Component {
     super(props);
 
     this.state = {
-      pos: 0.5
+      pos: 0
     };
   }
 

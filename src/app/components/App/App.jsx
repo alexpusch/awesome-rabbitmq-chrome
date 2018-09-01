@@ -56,7 +56,7 @@ class App extends React.Component {
         lastUpdateDate: new Date().getTime()
       });
 
-      setTimeout(this.refreshData.bind(this), 5000);
+      setTimeout(this.refreshData.bind(this), this.props.config.timerInterval);
     });
   }
 
@@ -67,7 +67,10 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Countdown duration={5000} startTime={this.state.lastUpdateDate} />
+        <Countdown
+          duration={this.props.config.timerInterval}
+          startTime={this.state.lastUpdateDate}
+        />
         <QueuesTable data={this.state.data} config={this.props.config} />
       </div>
     );
