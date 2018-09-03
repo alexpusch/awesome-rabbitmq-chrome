@@ -33,19 +33,18 @@ class NumericFilter extends React.Component {
 
     return (
       <div ref={this.ref} className="numeric-filter__wrapper">
-        {this.state.edit ? (
+        <div onMouseOver={enterEditMode} className="numeric-filter__closed-wrapper">
+          <NumericFilterClosedMode min={this.state.min} max={this.state.max} />
+        </div>
+        <div className="numeric-filter__edit-wrapper">
           <NumericFilterEditMode
             min={this.state.min}
             max={this.state.max}
             onChange={onChange}
             onMouseOut={leaveEditMode}
-            componentWidth={this.ref.current.offsetWidth}
+            componentWidth={this.ref.current ? this.ref.current.offsetWidth : 100}
           />
-        ) : (
-          <div onMouseOver={enterEditMode} className="numeric-filter__closed-wrapper">
-            <NumericFilterClosedMode min={this.state.min} max={this.state.max} />
-          </div>
-        )}
+        </div>
       </div>
     );
   }

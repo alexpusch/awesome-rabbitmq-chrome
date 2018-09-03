@@ -5,3 +5,11 @@
 .numeric-filter__wrapper {
   height: 100%;
 }
+
+.numeric-filter__edit-wrapper {
+  display: none;
+}
+
+.numeric-filter__wrapper:hover .numeric-filter__edit-wrapper {
+  display: block;
+}
