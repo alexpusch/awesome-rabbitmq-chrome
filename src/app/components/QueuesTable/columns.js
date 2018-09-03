@@ -9,9 +9,10 @@ import {
   numberFormatter,
   perSecondFormatter,
   bytesFormatter,
-  stateFormatter
+  stateFormatter,
+  percentFormatter
 } from "./helpers/formatters";
-import { uniqe, first, sum, empty } from "./helpers/aggregates";
+import { unique, first, sum, empty } from "./helpers/aggregates";
 import NumericFilter from "../NumericFilter/NumericFilter";
 import TextFilter from "../TextFilter/TextFilter";
 
@@ -60,15 +61,22 @@ function getColumns(queueConfig) {
   return [
     {
       Header: "🔗",
-      accessor: item => `/#/queues/%2F/${item.name}`,
+      accessor: item => {
+        console.log("item", item.name);
+        return `/#/queues/%2F/${item.name}`;
+      },
       id: "link",
       maxWidth: 40,
-      Cell: row => (
-        <a href={row.value} target="_blank">
-          🔗
-        </a>
-      ),
-      aggregate: empty,
+      Cell: row => {
+        return row.value ? (
+          <a href={row.value} target="_blank">
+            🔗
+          </a>
+        ) : (
+          ""
+        );
+      },
+      aggregate: first,
       filterable: false,
       pickable: false,
       show: true
@@ -130,9 +138,10 @@ function getColumns(queueConfig) {
           Header: "Policy",
           accessor: "policy",
           maxWidth: 150,
-          aggregate: first,
+          aggregate: unique,
           filterable: true,
           Filter: withFilterComponent(TextFilter),
+          filterMethod: containsFilter,
           pickable: true,
           show: false
         },
@@ -151,10 +160,11 @@ function getColumns(queueConfig) {
         },
         {
           Header: "Consumers utilisation",
-          accessor: "consumer_utilisation",
+          id: "consumer_utilisation",
+          accessor: item => Math.floor(item.consumer_utilisation * 100),
           maxWidth: 100,
           aggregate: vals => _.mean(vals),
-          Cell: withFormatter(numberFormatter),
+          Cell: withFormatter(percentFormatter),
           filterable: true,
           pickable: true,
           show: false,
@@ -166,7 +176,7 @@ function getColumns(queueConfig) {
           Header: "State",
           accessor: "state",
           maxWidth: 100,
-          aggregate: uniqe,
+          aggregate: unique,
           filterable: false,
           pickable: true,
           Cell: withFormatter(stateFormatter),

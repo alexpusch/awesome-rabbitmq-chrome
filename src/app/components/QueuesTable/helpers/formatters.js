@@ -3,6 +3,7 @@ import numeral from "numeral";
 import bytes from "bytes";
 
 const numberFormatter = row => numeral(row.value).format("0a");
+const percentFormatter = row => `${row.value}%`;
 const perSecondFormatter = row => `${numeral(row.value).format("0.0a")}/s`;
 const bytesFormatter = row => bytes(row.value);
 const stateFormatter = row => {
@@ -20,4 +21,4 @@ const stateFormatter = row => {
   return <div style={{ color: color }}>{row.value}</div>;
 };
 
-export { numberFormatter, perSecondFormatter, bytesFormatter, stateFormatter };
+export { numberFormatter, perSecondFormatter, bytesFormatter, stateFormatter, percentFormatter };
