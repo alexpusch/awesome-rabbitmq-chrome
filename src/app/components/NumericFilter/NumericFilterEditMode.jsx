@@ -7,12 +7,12 @@ const NumericFilterEditMode = props => {
   };
 
   const onChangeMin = e => {
-    const value = parseInt(e.target.value, 10);
+    const value = e.target.value === "" ? undefined : parseInt(e.target.value, 10);
     props.onChange({ min: value, max: props.max });
   };
 
   const onChangeMax = e => {
-    const value = parseInt(e.target.value, 10);
+    const value = e.target.value === "" ? undefined : parseInt(e.target.value, 10);
     props.onChange({ min: props.min, max: value });
   };
 
