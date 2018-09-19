@@ -61,10 +61,7 @@ function getColumns(queueConfig) {
   return [
     {
       Header: "🔗",
-      accessor: item => {
-        console.log("item", item.name);
-        return `/#/queues/%2F/${item.name}`;
-      },
+      accessor: item => `/#/queues/%2F/${item.name}`,
       id: "link",
       maxWidth: 40,
       Cell: row => {

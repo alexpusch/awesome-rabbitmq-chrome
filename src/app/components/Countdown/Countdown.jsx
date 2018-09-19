@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Countdown.css";
+import classnames from "classnames";
 
 class Countdown extends React.Component {
   constructor(props) {
@@ -29,8 +30,10 @@ class Countdown extends React.Component {
   render() {
     const width = `${this.state.pos * 100}%`;
     const style = { width };
+    const classNames = classnames({ countdown: true, "countdown--error": this.props.isError });
+
     return (
-      <div className="countdown">
+      <div className={classNames}>
         <div className="countdown__progress" style={style} />
       </div>
     );

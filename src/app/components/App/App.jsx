@@ -23,41 +23,50 @@ class App extends React.Component {
       url: URL,
       withCredentials: true,
       headers: { authorization: this.props.config.authHeader }
-    }).then(json => {
-      const items = json.data.items;
-      this.queuesAverageState.addDataPoint(items);
+    })
+      .then(json => {
+        const items = json.data.items;
+        this.queuesAverageState.addDataPoint(items);
 
-      const itemsWithWindow = items.map((queue, i) => {
-        const queueAverageState1m = this.queuesAverageState.getAverage(
-          queue.name,
-          TimeConsts.MINUTE
-        );
-        const queueAverageState5m = this.queuesAverageState.getAverage(
-          queue.name,
-          5 * TimeConsts.MINUTE
-        );
-        const queueAverageState15m = this.queuesAverageState.getAverage(
-          queue.name,
-          15 * TimeConsts.MINUTE
-        );
+        const itemsWithWindow = items.map((queue, i) => {
+          const queueAverageState1m = this.queuesAverageState.getAverage(
+            queue.name,
+            TimeConsts.MINUTE
+          );
+          const queueAverageState5m = this.queuesAverageState.getAverage(
+            queue.name,
+            5 * TimeConsts.MINUTE
+          );
+          const queueAverageState15m = this.queuesAverageState.getAverage(
+            queue.name,
+            15 * TimeConsts.MINUTE
+          );
 
-        return Object.assign({}, queue, {
-          average: queueAverageState1m,
-          trendAverage: {
-            trend1m: getTrend(queueAverageState1m),
-            trend5m: getTrend(queueAverageState5m),
-            trend15m: getTrend(queueAverageState15m)
-          }
+          return Object.assign({}, queue, {
+            average: queueAverageState1m,
+            trendAverage: {
+              trend1m: getTrend(queueAverageState1m),
+              trend5m: getTrend(queueAverageState5m),
+              trend15m: getTrend(queueAverageState15m)
+            }
+          });
         });
-      });
 
-      this.setState({
-        data: itemsWithWindow,
-        lastUpdateDate: new Date().getTime()
-      });
+        this.setState({
+          updateError: undefined,
+          data: itemsWithWindow,
+          lastUpdateDate: new Date().getTime()
+        });
 
-      setTimeout(this.refreshData.bind(this), this.props.config.timerInterval);
-    });
+        setTimeout(this.refreshData.bind(this), this.props.config.timerInterval);
+      })
+      .catch(err => {
+        this.setState({
+          updateError: err,
+          lastUpdateDate: new Date().getTime()
+        });
+        setTimeout(this.refreshData.bind(this), this.props.config.timerInterval);
+      });
   }
 
   componentDidMount() {
@@ -68,6 +77,7 @@ class App extends React.Component {
     return (
       <div>
         <Countdown
+          isError={!!this.state.updateError}
           duration={this.props.config.timerInterval}
           startTime={this.state.lastUpdateDate}
         />

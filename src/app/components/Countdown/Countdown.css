@@ -8,3 +8,7 @@
   height: 100%;
   background: #3399e2;
 }
+
+.countdown--error .countdown__progress {
+  background: #cc000a;
+}
