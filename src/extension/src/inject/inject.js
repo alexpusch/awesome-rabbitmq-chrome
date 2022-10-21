@@ -25,7 +25,7 @@ chrome.runtime.sendMessage({ type: "awesome-rabbit-load", return: true }, functi
 
       startApp(root, config);
       // note: Change the favicon to mark the tab has been 0wned.
-      document.querySelector('link[rel*="icon"]').href = chrome.extension.getURL(
+      document.querySelector('link[rel*="icon"]').href = chrome.runtime.getURL(
         "icons/icon128.png"
       );
     }
@@ -36,4 +36,3 @@ function isRabbitManagement() {
   const title = window.document.head.querySelector("title");
   return title.innerText === "RabbitMQ Management";
 }
-
