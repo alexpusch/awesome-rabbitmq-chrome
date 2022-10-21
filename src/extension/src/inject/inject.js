@@ -1,10 +1,12 @@
 import startApp from "../../../app/index";
 import "react-table/react-table.css";
 
-chrome.extension.sendMessage({ type: "awesome-rabbit-load" }, function(response) {
+chrome.runtime.sendMessage({ type: "awesome-rabbit-load", return: true }, function(response) {
   if (!isRabbitManagement()) return;
 
-  const scriptEl = createElement(`<script>(${bootstrapScript.toString()})();</script>`);
+  const scriptEl = document.createElement(`script`);
+  const src = chrome.runtime.getURL('bootstrap.js')
+  scriptEl.src = src;
   window.document.head.appendChild(scriptEl);
 
   chrome.runtime.sendMessage({
@@ -35,27 +37,3 @@ function isRabbitManagement() {
   return title.innerText === "RabbitMQ Management";
 }
 
-function createElement(htmlString) {
-  return document.createRange().createContextualFragment(htmlString);
-}
-
-function bootstrapScript() {
-  // global var used by rabbitmq code
-  extension_count++;
-  NAVIGATION.Awesome = ["#/awesome", "management"];
-  dispatcher_add(sammy => {
-    sammy.get("/awesome", context => {
-      current_highlight = "#/awesome";
-      update_navigation();
-      replace_content("main", "<div id='awesome-root'></div>");
-
-      const message = {
-        source: "awesome",
-        authHeader: auth_header(),
-        timerInterval: window.timer_interval
-      };
-
-      window.postMessage(message, "*");
-    });
-  });
-}

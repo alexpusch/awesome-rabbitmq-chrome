@@ -5,7 +5,7 @@ function containsFilter(filter, row) {
 }
 
 function queueFilter(filter, row) {
-  const isBaseName = row["baseName"].includes(filter.value);
+  const isBaseName = row["baseName"].toLowerCase().includes(filter.value.toLowerCase());
   let isNode = false;
 
   isNode =

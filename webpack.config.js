@@ -5,6 +5,7 @@ const axios = require('axios');
 module.exports = {
   entry: {
     bundle: './src/extension/src/inject/inject.js',
+    bootstrap: './src/extension/src/inject/bootstrap.js',
     background: './src/extension/src/bg/background.js'
   },
   node: {
